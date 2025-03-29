@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Calendar, Newspaper } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface ArticleCardProps {
   article: {
@@ -19,9 +19,19 @@ interface ArticleCardProps {
   variant?: "default" | "featured"
 }
 
+const isValidImageUrl = (url: string | null): boolean => {
+  if(!url) return false;
+  return /^https?:\/\//.test(url) && !url.includes('{') && !url.includes('}')
+}
+
 export function ArticleCard({ article, variant = "default" }: ArticleCardProps) {
   const isFeatured = variant === "featured"
   const [imageError, setImageError] = useState(false)
+  const [validImage, setValidImage] = useState(false);
+
+  useEffect(() => {
+    setValidImage(isValidImageUrl(article.imageUrl));
+  }, [article.imageUrl]);
   
   return (
     <Card className={`overflow-hidden h-full transition-all hover:shadow-md ${
@@ -30,13 +40,13 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
       {/* Image container - Badge removed */}
       <div className={`${isFeatured ? "lg:w-2/5 lg:min-h-full" : "w-full"} p-0`}>
         <div className="aspect-video w-full h-full relative">
-          {!article.imageUrl || imageError ? (
+          {!validImage || imageError ? (
             <div className="absolute inset-0 bg-muted flex items-center justify-center">
               <Newspaper className="h-12 w-12 text-muted-foreground opacity-20" />
             </div>
           ) : (
             <Image
-              src={article.imageUrl}
+              src={article.imageUrl!}
               alt={article.title}
               fill
               className="object-cover"
