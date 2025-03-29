@@ -45,14 +45,11 @@ export default function ArticlesGrid() {
     const fetchArticles = async () => {
       try {
         setLoading(true);
-
-        const apikey = process.env.NEXT_PUBLIC_NEWS_API_KEY;
-
-        let url = null;
-        if (selectedCategory == "all") {
-          url = `https://newsapi.org/v2/top-headlines?category=technology&apiKey=${apikey}`;
+        let url;
+        if (selectedCategory === "all") {
+          url = `/api/news?category=all`;
         } else {
-          url = `https://newsapi.org/v2/everything?q=${selectedCategory}&apiKey=${apikey}`;
+          url = `/api/news?category=${selectedCategory}`;
         }
 
         const response = await fetch(url);
@@ -178,7 +175,9 @@ export default function ArticlesGrid() {
                 <PaginationPrevious
                   onClick={currentPage > 1 ? handlePrev : undefined}
                   className={
-                    currentPage === 1 ? "pointer-events-none cursor-not-allowed opacity-50" : "cursor-pointer"
+                    currentPage === 1
+                      ? "pointer-events-none cursor-not-allowed opacity-50"
+                      : "cursor-pointer"
                   }
                 />
               </PaginationItem>
