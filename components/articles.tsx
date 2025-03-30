@@ -1,6 +1,6 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import { useArticles } from "@/lib/context/ArticlesContext";
+import { useState, useEffect, cache } from "react";
 import { ArticleCard } from "@/components/ui/article-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -26,7 +26,6 @@ interface Article {
   title: string;
   description: string;
   imageUrl: string;
-  category: string;
   source: string;
   publishedAt: string;
   readTime?: string;
@@ -34,51 +33,15 @@ interface Article {
 }
 
 export default function ArticlesGrid() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
+  const {articles, loading, fetchArticles} = useArticles();
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
+
   const articlesPerPage = 21;
 
   useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        setLoading(true);
-        let url;
-        if (selectedCategory === "all") {
-          url = `/api/news?category=all`;
-        } else {
-          url = `/api/news?category=${selectedCategory}`;
-        }
-
-        const response = await fetch(url);
-        const data = await response.json();
-        if (data.articles && Array.isArray(data.articles)) {
-          const formattedArticles = data.articles.map(
-            (article: any, index: number) => ({
-              id: index.toString(),
-              title: article.title,
-              description: article.description || null,
-              imageUrl: article.urlToImage || null,
-              category: "technology",
-              source: article.source?.name || null,
-              publishedAt: article.publishedAt,
-              url: article.url,
-            })
-          );
-          setArticles(formattedArticles);
-        } else {
-          setArticles([]);
-        }
-      } catch (error) {
-        console.error("Error fetching articles:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticles();
+    fetchArticles(selectedCategory);
   }, [selectedCategory]);
 
   const handleCategoryChange = (category: string) => {

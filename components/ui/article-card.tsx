@@ -10,8 +10,8 @@ interface ArticleCardProps {
     title: string
     description: string
     imageUrl: string | null
-    category: string
-    source: string
+    
+    source: string | null
     publishedAt: string
     readTime?: string
     url: string

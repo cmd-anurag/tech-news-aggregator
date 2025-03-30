@@ -17,6 +17,7 @@ export async function GET(request: Request) {
   }
   
   try {
+    console.log("Fetching latest news...");
     const response = await fetch(url);
     const data = await response.json();
     return NextResponse.json(data);
