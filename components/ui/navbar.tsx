@@ -52,8 +52,16 @@ export default function Navbar() {
     }`}>
       <div className="container flex items-center justify-between h-16 px-4 md:px-6 mx-auto">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-3xl">
-          <span className="text-primary">Tech</span>News
+        <Link 
+          href="/" 
+          className="group relative flex items-center font-black text-3xl md:text-4xl tracking-tight hover:scale-105 transition-all duration-300 ease-out"
+        >
+          <span className="bg-gradient-to-br from-primary via-purple-500 to-blue-500 bg-clip-text text-transparent drop-shadow">Tech</span>
+          <span className="relative">
+            <span className="relative z-10">News</span>
+            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-gradient-to-r from-primary to-blue-500 group-hover:w-full transition-all duration-300 rounded-full"></span>
+          </span>
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-purple-500/20 to-blue-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg -z-10"></div>
         </Link>
 
         {/* Desktop Navigation */}
