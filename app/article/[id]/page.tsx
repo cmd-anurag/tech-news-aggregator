@@ -1,8 +1,13 @@
-export default function ArticlePage({params} : { params: {id: string}}) {
-    return (
-        <div>
-          <h1>Article ID: {params.id}</h1>
-        {/* 🥱 */}
-        </div>
-      );
+export default async function ArticlePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return (
+    <div>
+      <h1>Article ID: {id}</h1>
+    </div>
+  );
 }
